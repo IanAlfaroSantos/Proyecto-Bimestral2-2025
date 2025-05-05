@@ -55,10 +55,7 @@ router.put(
 
 router.delete(
     "/",
-    [
-        validarJWT,
-        validarCampos
-    ],
+    validarJWT,
     deleteUser
 )
 

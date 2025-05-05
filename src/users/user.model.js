@@ -15,6 +15,7 @@ const UserSchema = Schema({
     username: {
         type: String,
         unique: [ true, "El username ingresado ya existe en la base de datos" ],
+        required: [ true, "El username es requerido" ],
         lowercase: true
     },
     email: {

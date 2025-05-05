@@ -108,13 +108,13 @@ export const soloAdmin = async (req) => {
     }
 }
 
-export const validarUsernameParaEliminar = async (username) => {
+export const validarUsernameParaEliminar = async (username = '') => {
     if (!username) {
         throw new Error('Necesita proporcionar su username para poder eliminar');
     }
 }
 
-export const pedirPassword = async (password) => {
+export const pedirPassword = async (password = '') => {
     if (!password) {
         throw new Error('Necesita proporcionar su contraseña para poder eliminar');
     }

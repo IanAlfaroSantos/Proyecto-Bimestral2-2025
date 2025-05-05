@@ -47,8 +47,8 @@ export const login = async (req, res) => {
 export const register = async (req, res) => {
     try {
 
-        const data = req.body;
-        const { phone, password } = req.body;
+        const data = req.body || {};
+        const { phone, password } = data;
 
         await phoneLength(phone);
         await passwordLength(password);
@@ -131,7 +131,7 @@ export const getUserById = async (req, res) => {
 
 export const getUserByRole = async (req, res) => {
     try {
-        const { role } = req.params;
+        const { role } = req.params || {};
 
         await validarRole(role);
 
@@ -159,7 +159,7 @@ export const updateUser = async (req, res = response) => {
 
         const user = req.user;
         const { _id, email, role, password, currentPassword, ...data } = req.body;
-        let { username, phone } = req.body;
+        let { username, phone } = req.body || {};
         
         await phoneLength(phone);
         await passwordLength(password);
@@ -189,7 +189,7 @@ export const updateRole = async (req, res = response) => {
     try {
 
         const { id } = req.params;
-        let { role } = req.body;
+        let { role } = req.body || {};
 
         await existeUserById(id);
 
@@ -219,20 +219,17 @@ export const updateRole = async (req, res = response) => {
 export const deleteUser = async (req, res = response) => {
 
     try {
+        const user = req.user;
+        const { password, username } = req.body || {};
 
-        const id = req.user._id;
-        const { password, username } = req.body;
-                
-        const user = await User.findById(id);
-        
-        await noActualizarAdmin(id);
+        await noActualizarAdmin(user._id);
         await statusUser(user);
         await validarUsernameParaEliminar(username);
         await pedirPassword(password);
         await coincidirUsername(username, user);
         await validarPasswordParaEliminar(user, password);
         
-        const userDelete = await User.findByIdAndUpdate(id, { status: false }, { new: true });
+        const userDelete = await User.findByIdAndUpdate(user._id, { status: false }, { new: true });
 
         res.status(200).json({
             success: true,
