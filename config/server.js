@@ -5,6 +5,8 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import {dbConnection} from './mogo.js';
 import limiter from '../src/middlewares/validate-cant-peticiones.js';
+import userRoutes from "../src/users/user.routes.js";
+import { createAdminWeb, createAdminHotel } from '../src/users/user.controller.js';
 
 const configurarMiddlewares = (app) => {
     app.use(express.urlencoded({extended: false}));
@@ -15,13 +17,16 @@ const configurarMiddlewares = (app) => {
     app.use(limiter);
 }
 
-const configurarRutas = () => {
+const configurarRutas = (app) => {
+    app.use('/hoteles/users', userRoutes);
 }
 
 const conectarDB = async  () => {
     try{
         await dbConnection();
         console.log("Conexion realizada a la base de datos");
+        await createAdminWeb();
+        await createAdminHotel();
     }catch(error){
         console.error('Ocurrio un error al intentar conectar con la base de datos', error);
         process.exit(1);
