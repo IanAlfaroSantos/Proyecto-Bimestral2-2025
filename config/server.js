@@ -7,6 +7,7 @@ import {dbConnection} from './mogo.js';
 import limiter from '../src/middlewares/validate-cant-peticiones.js';
 import userRoutes from "../src/users/user.routes.js";
 import hotelRoutes from "../src/hoteles/hotel.routes.js";
+import roomRoutes from "../src/rooms/room.routes.js"
 import { createAdminWeb, createAdminHotel } from '../src/users/user.controller.js';
 
 const configurarMiddlewares = (app) => {
@@ -21,6 +22,7 @@ const configurarMiddlewares = (app) => {
 const configurarRutas = (app) => {
     app.use('/hoteles/users', userRoutes);
     app.use('/hoteles/hoteles', hotelRoutes);
+    app.use('/hoteles/rooms', roomRoutes);
 }
 
 const conectarDB = async  () => {
