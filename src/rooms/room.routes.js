@@ -13,7 +13,10 @@ router.get(
 
 router.get(
     "/:id",
-    validarJWT,
+    [
+        check("id", "ID de habitación inválido").isMongoId(),
+        validarCampos
+    ],
     getRoomById
 );
 
