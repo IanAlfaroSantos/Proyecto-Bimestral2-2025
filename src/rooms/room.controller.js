@@ -39,7 +39,6 @@ export const createRoom = async (req = request, res = response) => {
             room: newRoom
         });
     } catch (error) {
-        console.log(error)
         return res.status(500).json({
             success: false,
             msg: "Error al crear la habitación",
@@ -106,7 +105,6 @@ export const updateRoom = async (req, res = response) => {
             updateRoom
         });
     } catch (error) {
-        console.log(error);
         return res.status(500).json({
             success: false,
             msg: "Error al actualizar la habitación",
