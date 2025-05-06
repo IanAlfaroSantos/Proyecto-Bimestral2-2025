@@ -1,8 +1,8 @@
 import { response, request } from "express";
 import Reservacion from "./reservacion.model.js";
-//import Habitacion from "../rooms/room.model.js";
+import Habitacion from "../rooms/room.model.js";
 import Evento from "../eventos/evento.model.js";
-import { validarNombreUsuario, validarNombreHotel, /*validarHabitacion,*/ validarIdEvento } from '../helpers/db-validator-reservaciones.js';
+import { validarNombreUsuario, validarNombreHotel, validarRoom, validarIdEvento } from '../helpers/db-validator-reservaciones.js';
 
 export const postReservacion = async (req = request, res = response) => {
     try {
@@ -19,7 +19,7 @@ export const postReservacion = async (req = request, res = response) => {
         const hotel = await validarNombreHotel(nombreHotel);
 
         for (const habitacionId of habitaciones) {
-            await validarHabitacion(habitacionId, hotel._id);
+            await validarRoom(habitacionId, hotel._id);
         }
 
         for (const eventoId of eventos) {
@@ -127,7 +127,7 @@ export const putReservacion = async (req = request, res = response) => {
         }
 
         for (const habitacionId of habitaciones) {
-            await validarHabitacion(habitacionId, reservacion.hotel);
+            await validarRoom(habitacionId, reservacion.hotel);
         }
 
         for (const eventoId of eventos) {

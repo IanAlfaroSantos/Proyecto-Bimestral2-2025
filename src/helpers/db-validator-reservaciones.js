@@ -1,6 +1,6 @@
 import Reservacion from '../reservaciones/reservacion.model.js';
 import User from '../users/user.model.js';
-//import Habitacion from '../rooms/room.model.js';
+import Room from '../rooms/room.model.js';
 import Hotel from '../hoteles/hotel.model.js';
 import Evento from '../eventos/evento.model.js';
 
@@ -22,8 +22,8 @@ export const validarNombreUsuario = async (name = ' ') => {
     return usuario;
 };
 
-/*export const validarHabitacion = async (id = ' ') => {
-    const habitacion = await Habitacion.findById(id);
+export const validarRoom = async (id = ' ') => {
+    const habitacion = await Room.findById(id);
 
     if (!habitacion) {
         throw new Error(`Habitación con ID "${id}" no encontrada!`);
@@ -38,7 +38,7 @@ export const validarNombreUsuario = async (name = ' ') => {
     }
 
     return habitacion;
-};*/
+};
 
 export const validarNombreHotel = async (name = ' ') => {
     const hotel = await Hotel.findOne({ name });
