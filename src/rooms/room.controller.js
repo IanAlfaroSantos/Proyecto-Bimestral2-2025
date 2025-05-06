@@ -6,7 +6,8 @@ import {
     validarDatosRoom,
     noAgregarRoomRepetida,
     existeRoomById,
-    soloAdminHotel
+    soloAdminHotel,
+    verificarCantidadHabitaciones
 } from "../helpers/db-validator-rooms.js";
 
 export const createRoom = async (req = request, res = response) => {
@@ -18,20 +19,20 @@ export const createRoom = async (req = request, res = response) => {
         await verificarHotelExistente(hotel);
         await validarDatosRoom(quantity, price);
         await noAgregarRoomRepetida(hotel, type);
-
+        
         const newRoom = new Room({
             hotel: hotel._id,
             type,
             quantity,
             price
         });
-
+        
         await newRoom.save();
-
+        
         await Hotel.findByIdAndUpdate(hotel._id, {
             $inc: { habitacionesDisponibles: quantity }
         });
-
+        
         return res.status(201).json({
             success: true,
             msg: "Habitación registrada exitosamente",
@@ -50,11 +51,11 @@ export const createRoom = async (req = request, res = response) => {
 export const getRoomById = async (req, res) => {
     try {
         const { id } = req.params;
-
+        
         await existeRoomById(id);
-
+        
         const room = await Room.findById(id).populate("hotel", "name");
-
+        
         res.status(200).json({
             success: true,
             msg: "Room encontrada exitosamente!!",
@@ -69,29 +70,43 @@ export const getRoomById = async (req, res) => {
     }
 };
 
-export const updateRoom = async (req = request, res = response) => {
+export const updateRoom = async (req, res = response) => {
     try {
         const { id } = req.params;
-        const { type, quantity, price } = req.body;
+        const { _id, quantity, hotel, type, name, ...data } = req.body || {};
+        const { addQuantity, removeQuantity } = req.body || {};
 
         await soloAdminHotel(req);
-        await validarDatosRoom(quantity, price);
 
         const room = await Room.findById(id);
         if (!room) throw new Error("La habitación no existe");
 
-        room.type = type;
-        room.quantity = quantity;
-        room.price = price;
+        const hotelId = room.hotel;
 
-        await room.save();
+        const hotel1 = await Hotel.findById(hotelId);
+
+        if (addQuantity) {
+            await Hotel.findByIdAndUpdate(hotelId, {
+                $inc: { habitacionesDisponibles: addQuantity }
+            });
+        }
+
+        if (removeQuantity) {
+            await verificarCantidadHabitaciones(hotel1, removeQuantity);
+            await Hotel.findByIdAndUpdate(hotelId, {
+                $inc: { habitacionesDisponibles: -removeQuantity }
+            });
+        }
+
+        const updateRoom = await Room.findByIdAndUpdate(id, data, { new: true });
 
         return res.status(200).json({
             success: true,
             msg: "Habitación actualizada correctamente",
-            room
+            updateRoom
         });
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             success: false,
             msg: "Error al actualizar la habitación",

@@ -16,6 +16,14 @@ const RoomSchema = Schema({
         required: [true, "El número de habitaciones es requerido"],
         min: [1, "Debe haber al menos una habitación"]
     },
+    addQuantity: {
+        type: Number,
+        default: 0
+    },
+    removeQuantity: {
+        type: Number,
+        default: 0
+    },
     price: {
         type: Number,
         required: [true, "El precio es requerido"],

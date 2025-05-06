@@ -22,6 +22,12 @@ export const verificarHotelExistente = async (hotelId) => {
     }
 };
 
+export const verificarCantidadHabitaciones = async (hotel1, removeQuantity) => {
+    if (removeQuantity > hotel1.habitacionesDisponibles) {
+        throw new Error(`No hay suficientes habitaciones en el hotel para eliminar, solo hay: ${hotel1.habitacionesDisponibles}`);
+    }
+};
+
 export const validarDatosRoom = async (quantity, price) => {
     if (quantity <= 0) {
         throw new Error("La cantidad de habitaciones debe ser mayor a 0!!!");
