@@ -1,0 +1,60 @@
+[{
+  "_id": {
+    "$oid": "681ae63007a6414f9cd7855e"
+  },
+  "hotel": {
+    "$oid": "681ac2f28b04681bb313286c"
+  },
+  "type": "alta",
+  "quantity": 20,
+  "addQuantity": 0,
+  "removeQuantity": 0,
+  "price": 5000,
+  "status": false,
+  "createdAt": {
+    "$date": "2025-05-07T04:48:48.945Z"
+  },
+  "updatedAt": {
+    "$date": "2025-05-07T04:54:16.307Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "681ae975d7314249ca07cc7f"
+  },
+  "hotel": {
+    "$oid": "681acef962bbe78be442c335"
+  },
+  "type": "alta",
+  "quantity": 20,
+  "addQuantity": 0,
+  "removeQuantity": 0,
+  "price": 5000,
+  "status": true,
+  "createdAt": {
+    "$date": "2025-05-07T05:02:45.896Z"
+  },
+  "updatedAt": {
+    "$date": "2025-05-07T05:02:45.896Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "681aea05d7314249ca07cc99"
+  },
+  "hotel": {
+    "$oid": "681ac2f28b04681bb313286c"
+  },
+  "type": "media",
+  "quantity": 20,
+  "addQuantity": 0,
+  "removeQuantity": 0,
+  "price": 5000,
+  "status": true,
+  "createdAt": {
+    "$date": "2025-05-07T05:05:09.288Z"
+  },
+  "updatedAt": {
+    "$date": "2025-05-07T05:05:09.288Z"
+  }
+}]

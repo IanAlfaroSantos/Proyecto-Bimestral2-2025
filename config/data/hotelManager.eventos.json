@@ -1,0 +1,54 @@
+[{
+  "_id": {
+    "$oid": "681adde1f8e4fcf8bbcf5e0d"
+  },
+  "hotel": {
+    "$oid": "681ac2f28b04681bb313286c"
+  },
+  "tipoSala": "ALTA CALIDAD",
+  "numeroSalas": 10,
+  "precio": 10000,
+  "status": false,
+  "createdAt": {
+    "$date": "2025-05-07T04:13:21.376Z"
+  },
+  "updatedAt": {
+    "$date": "2025-05-07T04:54:16.314Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "681ae0c8f8e4fcf8bbcf5e2a"
+  },
+  "hotel": {
+    "$oid": "681acef962bbe78be442c335"
+  },
+  "tipoSala": "BAJA CALIDAD",
+  "numeroSalas": 100,
+  "precio": 100,
+  "status": true,
+  "createdAt": {
+    "$date": "2025-05-07T04:25:44.036Z"
+  },
+  "updatedAt": {
+    "$date": "2025-05-07T04:25:44.036Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "681aea49d7314249ca07cca9"
+  },
+  "hotel": {
+    "$oid": "681ac2f28b04681bb313286c"
+  },
+  "tipoSala": "MEDIA CALIDAD",
+  "numeroSalas": 100,
+  "precio": 100,
+  "status": true,
+  "createdAt": {
+    "$date": "2025-05-07T05:06:17.794Z"
+  },
+  "updatedAt": {
+    "$date": "2025-05-07T05:06:17.794Z"
+  }
+}]

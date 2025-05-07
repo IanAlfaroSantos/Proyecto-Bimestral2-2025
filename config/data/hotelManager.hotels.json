@@ -1,36 +1,36 @@
 [{
   "_id": {
-    "$oid": "68196ce3c69b575b91333e3c"
+    "$oid": "681ac2f28b04681bb313286c"
   },
-  "name": "luna azul",
-  "direccion": "Zona 14",
-  "categoria": "3 estrellas",
-  "habitacionesDisponibles": 0,
-  "comodidades": 20,
-  "salasDisponibles": 0,
+  "name": "palace",
+  "direccion": "Zona 1",
+  "categoria": "5 estrellas",
+  "habitacionesDisponibles": 160,
+  "comodidades": 10,
+  "salasDisponibles": 130,
   "status": true,
   "createdAt": {
-    "$date": "2025-05-06T01:58:59.146Z"
+    "$date": "2025-05-07T02:18:26.648Z"
   },
   "updatedAt": {
-    "$date": "2025-05-06T02:12:03.423Z"
+    "$date": "2025-05-07T05:06:17.796Z"
   }
 },
 {
   "_id": {
-    "$oid": "68196d32c69b575b91333e47"
+    "$oid": "681acef962bbe78be442c335"
   },
-  "name": "natura verde",
+  "name": "bodrio",
   "direccion": "Zona 1",
-  "categoria": "5 estrellas",
-  "habitacionesDisponibles": 0,
-  "comodidades": 10,
-  "salasDisponibles": 0,
+  "categoria": "1 estrella",
+  "habitacionesDisponibles": 120,
+  "comodidades": 5,
+  "salasDisponibles": 110,
   "status": true,
   "createdAt": {
-    "$date": "2025-05-06T02:00:18.226Z"
+    "$date": "2025-05-07T03:09:45.639Z"
   },
   "updatedAt": {
-    "$date": "2025-05-06T02:00:18.226Z"
+    "$date": "2025-05-07T05:02:45.903Z"
   }
 }]
