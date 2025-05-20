@@ -3,7 +3,6 @@ import Reservacion from "../reservaciones/reservacion.model.js";
 import Room from "../rooms/room.model.js";
 import Evento from "../eventos/evento.model.js";
 
-// Crear una factura a partir de una reservación
 export const postFactura = async (req, res) => {
   try {
     const { reservacionId } = req.body;
@@ -46,7 +45,6 @@ export const postFactura = async (req, res) => {
 
     await nuevaFactura.save();
 
-    // 🔁 Obtener factura con populate
     const facturaPopulada = await Factura.findById(nuevaFactura._id)
       .populate("user", "-password")
       .populate("hotel")
@@ -78,7 +76,7 @@ export const postFactura = async (req, res) => {
 export const getFacturas = async (req, res) => {
   try {
     const facturas = await Factura.find()
-      .populate("user", "-password") // Puedes excluir campos sensibles
+      .populate("user", "-password")
       .populate("hotel")
       .populate({
         path: "reservacion",
