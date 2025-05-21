@@ -10,7 +10,7 @@ const router = Router()
 
 router.get('/demanda', getInformeDemandaHoteles);
 
-router.get('/reservaciones/:hotelId', getInformeReservacionesPorHotel)
+router.get('/reservaciones/:id', getInformeReservacionesPorHotel)
 
 
 export default router;

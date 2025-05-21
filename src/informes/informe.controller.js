@@ -17,6 +17,7 @@ export const getInformeDemandaHoteles = async (req, res) => {
                 ]);
 
                 return {
+                    hotelId: hotel._id,
                     hotel: hotel.name,
                     totalReservaciones,
                     habitacionesOcupadas: habitacionesOcupadas[0]?.total || 0
@@ -29,6 +30,7 @@ export const getInformeDemandaHoteles = async (req, res) => {
             estadisticas
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             success: false,
             message: 'Error al generar el informe de demanda de hoteles',
@@ -40,10 +42,10 @@ export const getInformeDemandaHoteles = async (req, res) => {
 
 export const getInformeReservacionesPorHotel = async (req, res) => {
     try {
-        const { hotelId } = req.params;
+        const { id } = req.params;
 
       
-        const hotel = await hotelModel.findById(hotelId);
+        const hotel = await hotelModel.findById(id);
         if (!hotel) {
             return res.status(404).json({
                 success: false,
@@ -52,7 +54,7 @@ export const getInformeReservacionesPorHotel = async (req, res) => {
         }
 
      
-        const reservaciones = await reservacionModel.find({ nombreHotel: hotelId })
+        const reservaciones = await reservacionModel.find({ nombreHotel: id })
             .populate('nombreUsuario', 'name surname')
             .populate('habitaciones', 'type price')
             .populate('eventos', 'tipoSala precio');
@@ -64,6 +66,7 @@ export const getInformeReservacionesPorHotel = async (req, res) => {
             reservaciones
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             success: false,
             message: 'Error al generar el informe de reservaciones por hotel',
