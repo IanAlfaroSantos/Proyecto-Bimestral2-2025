@@ -2,6 +2,8 @@ import { response, request } from "express";
 import Reservacion from "./reservacion.model.js";
 import Room from "../rooms/room.model.js";
 import Evento from "../eventos/evento.model.js";
+import Usuario from "../users/user.model.js";
+import hotelModel from "../hoteles/hotel.model.js";
 import {
     validarHabitaciones,
     validarEventos,
@@ -11,13 +13,15 @@ import {
 export const postReservacion = async (req, res) => {
     try {
         const {
-            nombreUsuario,
             nombreHotel,
             habitaciones = [],
             eventos = [],
             fechaOcupacion,
             fechaDesocupacion
         } = req.body;
+
+        
+        const userId = req.user;
 
         if (habitaciones.length === 0 && eventos.length === 0) {
             return res.status(400).json({
@@ -26,9 +30,22 @@ export const postReservacion = async (req, res) => {
             });
         }
 
-        const { usuario, hotel, error } = await validarUsuarioYHotel(nombreUsuario, nombreHotel);
-        if (error) {
-            return res.status(404).json({ success: false, message: error });
+        
+        const usuario = await Usuario.findById(userId);
+        if (!usuario) {
+            return res.status(404).json({
+                success: false,
+                message: 'Usuario no encontrado!'
+            });
+        }
+
+       
+        const hotel = await hotelModel.findOne({ name: nombreHotel });
+        if (!hotel) {
+            return res.status(404).json({
+                success: false,
+                message: 'Hotel no encontrado!'
+            });
         }
 
         const errorHabitaciones = await validarHabitaciones(habitaciones, hotel._id);
@@ -42,7 +59,7 @@ export const postReservacion = async (req, res) => {
         }
 
         const reservacion = new Reservacion({
-            nombreUsuario: usuario._id,
+            nombreUsuario: userId, 
             nombreHotel: hotel._id,
             habitaciones,
             eventos,

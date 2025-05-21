@@ -2,16 +2,16 @@ import { Router } from "express";
 import { check } from "express-validator";
 import { postReservacion, getReservaciones, getReservacionPorId, putReservacion, deleteReservacion } from "./reservacion.controller.js";
 import { validarCampos } from "../middlewares/validar-campos.js";
+import { validarJWT } from "../middlewares/validar-jwt.js";
 
 const router = Router();
 
 router.post(
     "/postReservacion",
-    [
-        validarCampos
-    ],
+    validarJWT,
+    validarCampos,
     postReservacion
-)
+);
 
 router.get("/getReservaciones", getReservaciones);
 
