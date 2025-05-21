@@ -11,6 +11,8 @@ import eventoRoutes from "../src/eventos/evento.routes.js";
 import reservacionRoutes from "../src/reservaciones/reservacion.routes.js";
 import roomRoutes from "../src/rooms/room.routes.js"
 import { createAdminWeb, createAdminHotel } from '../src/users/user.controller.js';
+import facturaRoutes from '../src/facturas/factura.routes.js';
+import informeRoutes from '../src/informes/informe.routes.js'
 
 const configurarMiddlewares = (app) => {
     app.use(express.urlencoded({ extended: false }));
@@ -27,6 +29,8 @@ const configurarRutas = (app) => {
     app.use('/hoteles/eventos', eventoRoutes);
     app.use('/hoteles/reservaciones', reservacionRoutes);
     app.use('/hoteles/rooms', roomRoutes);
+    app.use('/hoteles/facturas', facturaRoutes)
+    app.use('/hoteles/informes', informeRoutes);
 }
 
 const conectarDB = async () => {

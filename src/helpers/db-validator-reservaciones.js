@@ -1,65 +1,96 @@
-import Reservacion from '../reservaciones/reservacion.model.js';
-import User from '../users/user.model.js';
-import Room from '../rooms/room.model.js';
-import Hotel from '../hoteles/hotel.model.js';
-import Evento from '../eventos/evento.model.js';
+import User from "../users/user.model.js";
+import Hotel from "../hoteles/hotel.model.js";
+import Room from "../rooms/room.model.js";
+import Evento from "../eventos/evento.model.js";
+import Reservacion from "../reservaciones/reservacion.model.js";
 
-export const validarIdReservacion = async (id = ' ') => {
-    const existeReservacion = await Reservacion.findOne({ id });
+export const validarUsuarioYHotel = async (nombreUsuario, nombreHotel) => {
+    const usuario = await User.findOne({ username: nombreUsuario.toLowerCase() });
+    const hotel = await Hotel.findOne({ name: nombreHotel.toLowerCase() });
 
-    if (!existeReservacion) {
-        throw new Error(`Reservacion "${id}" no existe en la base de datos!`);
-    }
-}
-
-export const validarNombreUsuario = async (name = ' ') => {
-    const usuario = await User.findOne({ name });
-
-    if (!usuario) {
-        throw new Error(`User con nombre "${name}" no encontrado!`);
+    if (!usuario || !hotel) {
+        return { error: 'Usuario u hotel no encontrados!' };
     }
 
-    return usuario;
+    return { usuario, hotel };
 };
 
-export const validarRoom = async (id = ' ') => {
-    const habitacion = await Room.findById(id);
+export const validarHabitaciones = async (habitaciones, hotelId) => {
+    const habitacionesInvalidas = [];
 
-    if (!habitacion) {
-        throw new Error(`Habitación con ID "${id}" no encontrada!`);
+    for (const id of habitaciones) {
+        const habitacion = await Room.findById(id);
+
+        if (!habitacion) {
+            habitacionesInvalidas.push(id);
+            continue;
+        }
+
+        if (!habitacion.status) {
+            return {
+                success: false,
+                message: `La habitación con ID ${id} está ocupada!`
+            };
+        }
+
+        if (habitacion.hotel.toString() !== hotelId.toString()) {
+            return {
+                success: false,
+                message: `La habitación con ID ${id} no pertenece al hotel seleccionado!`
+            };
+        }
     }
 
-    if (habitacion.hotel.toString() !== id.toString()) {
-        throw new Error(`La habitación ${id} no pertenece al hotel ingresado!`);
+    if (habitacionesInvalidas.length > 0) {
+        return {
+            success: false,
+            message: `Una o más habitaciones no existen: ${habitacionesInvalidas.join(", ")}.`
+        };
     }
 
-    if (!habitacion.status) {
-        throw new Error(`La habitación ${id} ya está ocupada y se desocupa en: ${habitacion.fechaDesocupacion || 'una fecha no definida!'}`);
-    }
-
-    return habitacion;
+    return null;
 };
 
-export const validarNombreHotel = async (name = ' ') => {
-    const hotel = await Hotel.findOne({ name });
+export const validarEventos = async (eventos, hotelId) => {
+    const eventosInvalidos = [];
 
-    if (!hotel) {
-        throw new Error(`Hotel con nombre "${name}" no encontrado!`);
+    for (const id of eventos) {
+        const evento = await Evento.findById(id);
+
+        if (!evento) {
+            eventosInvalidos.push(id);
+            continue;
+        }
+
+        if (!evento.status) {
+            const reservacionExistente = await Reservacion.findOne({
+                eventos: evento._id,
+                status: true,
+            }).sort({ fechaDesocupacion: -1 });
+
+            return {
+                success: false,
+                message: `El evento con ID ${id} está ocupado!` +
+                    (reservacionExistente?.fechaDesocupacion
+                        ? ` Se desocupa en: ${reservacionExistente.fechaDesocupacion}.`
+                        : '')
+            };
+        }
+
+        if (evento.hotel.toString() !== hotelId.toString()) {
+            return {
+                success: false,
+                message: `El evento con ID ${id} no pertenece al hotel seleccionado!`
+            };
+        }
     }
 
-    return hotel;
-};
-
-export const validarIdEvento = async (id = ' ') => {
-    const evento = await Evento.findById(id);
-
-    if (!evento) {
-        throw new Error(`Evento con ID "${id}" no encontrado!`);
+    if (eventosInvalidos.length > 0) {
+        return {
+            success: false,
+            message: `Uno o más eventos no existen: ${eventosInvalidos.join(", ")}.`
+        };
     }
 
-    if (evento.hotel.toString() !== id.toString()) {
-        throw new Error(`El evento ${id} no pertenece al hotel ingresado!`);
-    }
-
-    return evento;
+    return null;
 };
