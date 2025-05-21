@@ -2,7 +2,7 @@ import { Router } from "express";
 import { check } from "express-validator";
 import { validarCampos } from "../middlewares/validar-campos.js";
 import { validarJWT } from "../middlewares/validar-jwt.js";
-import {getRoomById, getRooms, createRoom, updateRoom } from "./room.controller.js";
+import {getByType, getByHotelName, getRooms, createRoom, updateRoom } from "./room.controller.js";
 
 const router = Router();
 
@@ -11,14 +11,8 @@ router.get(
     getRooms
 );
 
-router.get(
-    "/:id",
-    [
-        check("id", "ID de habitación inválido").isMongoId(),
-        validarCampos
-    ],
-    getRoomById
-);
+router.get("/name/:name", getByHotelName);
+router.get("/tipo/:type", getByType);
 
 router.post(
     "/",

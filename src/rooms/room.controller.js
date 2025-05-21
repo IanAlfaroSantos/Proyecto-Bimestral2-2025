@@ -39,6 +39,7 @@ export const createRoom = async (req = request, res = response) => {
             room: newRoom
         });
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             success: false,
             msg: "Error al crear la habitación",
@@ -47,26 +48,44 @@ export const createRoom = async (req = request, res = response) => {
     }
 };
 
-export const getRoomById = async (req, res) => {
+export const getByType = async (req, res) => {
     try {
-        const { id } = req.params;
-        
-        await existeRoomById(id);
-        
-        const room = await Room.findById(id).populate("hotel", "name");
-        
-        res.status(200).json({
+        const { type } = req.params;
+        const rooms = await Room.find({ type });
+        return res.status(200).json({
             success: true,
-            msg: "Room encontrada exitosamente!!",
-            room
+            msg: "Habitaciones obtenidas exitosamente",
+            rooms
         });
     } catch (error) {
-        return res.status(500).json({
-            success: false,
-            msg: "Error al buscar room",
-            error: error.message
-        });
+        console.log(error);
+        return res.status(500).json({ success: false, msg: "Error al obtener habitaciones", error: error.message });
     }
+};
+
+export const getByHotelName = async (req, res) => {
+  try {
+    const { name } = req.params;
+
+   
+    const hoteles = await Hotel.find({ name });
+
+   
+    const hotelIds = hoteles.map(h => h._id);
+
+    
+    const habitaciones = await Room.find({ hotel: { $in: hotelIds } }).populate("hotel");
+
+    return res.status(200).json({
+      success: true,
+      msg: "Habitaciones obtenidas exitosamente por name",
+      habitaciones
+    });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ success: false, msg: "Error al obtener habitaciones", error: error.message });
+  }
 };
 
 export const updateRoom = async (req, res = response) => {
@@ -105,6 +124,7 @@ export const updateRoom = async (req, res = response) => {
             updateRoom
         });
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             success: false,
             msg: "Error al actualizar la habitación",
