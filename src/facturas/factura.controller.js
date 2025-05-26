@@ -1,9 +1,9 @@
+import mongoose from "mongoose";
 import Factura from "../facturas/factura.model.js";
 import Reservacion from "../reservaciones/reservacion.model.js";
 import Room from "../rooms/room.model.js";
 import Evento from "../eventos/evento.model.js";
 
-// Crear una factura a partir de una reservación
 export const postFactura = async (req, res) => {
   try {
     const { reservacionId } = req.body;
@@ -46,7 +46,6 @@ export const postFactura = async (req, res) => {
 
     await nuevaFactura.save();
 
-    // 🔁 Obtener factura con populate
     const facturaPopulada = await Factura.findById(nuevaFactura._id)
       .populate("user", "-password")
       .populate("hotel")
@@ -78,7 +77,7 @@ export const postFactura = async (req, res) => {
 export const getFacturas = async (req, res) => {
   try {
     const facturas = await Factura.find()
-      .populate("user", "-password") // Puedes excluir campos sensibles
+      .populate("user", "-password")
       .populate("hotel")
       .populate({
         path: "reservacion",
@@ -103,3 +102,37 @@ export const getFacturas = async (req, res) => {
     });
   }
 };
+
+export const getFacturasByUser = async (req, res) => {
+  try {
+    const userId = req.user._id; // Asegura tipo correcto
+
+    console.log("Usuario autenticado:", req.user);
+
+    const facturas = await Factura.find({ user: userId })
+      .populate("user", "-password")
+      .populate("hotel")
+      .populate({
+        path: "reservacion",
+        populate: [
+          { path: "nombreUsuario", select: "-password" },
+          { path: "nombreHotel" },
+          { path: "habitaciones" },
+          { path: "eventos" }
+        ]
+      });
+
+    res.status(200).json({
+      message: "Facturas del usuario obtenidas correctamente",
+      facturas
+    });
+
+  } catch (error) {
+    console.error("Error al obtener facturas del usuario:", error);
+    res.status(500).json({
+      message: "Error al obtener las facturas del usuario",
+      error: error.message
+    });
+  }
+};
+
