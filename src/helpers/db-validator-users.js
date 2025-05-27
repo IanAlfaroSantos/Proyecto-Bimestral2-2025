@@ -42,8 +42,18 @@ export const existeUser = async ( email = ' ', username = ' ') => {
         $or: [{ email }, { username }]
     });
 
-    if (!user) {
-        throw new Error(`Credenciales incorrectas, email: ${ email } o username: ${ username } no existen en la base de datos`);
+    if (email && !user) {
+        const userWithEmail = await User.findOne({ email });
+        if (!userWithEmail) {
+            throw new Error(`El email ${email} no existe en la base de datos`);
+        }
+    }
+
+    if (username && !user) {
+        const userWithUsername = await User.findOne({ username });
+        if (!userWithUsername) {
+            throw new Error(`El username ${username} no existe en la base de datos`);
+        }
     }
 }
 

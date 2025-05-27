@@ -162,7 +162,6 @@ export const updateUser = async (req, res = response) => {
         let { username, phone } = req.body || {};
         
         await phoneLength(phone);
-        await passwordLength(password);
         await noActualizarAdmin(user._id);
         await verificarUsuarioExistente(username, user);
         await statusUser(user);
