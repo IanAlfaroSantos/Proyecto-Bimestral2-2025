@@ -6,7 +6,7 @@ import { coincidirUsername, crearAdminHotelSiNoExiste, crearAdminWebSiNoExiste, 
 
 export const login = async (req, res) => {
 
-    const { email, username, password } = req.body;
+    const { email, username, password, role } = req.body;
 
     try {
 
@@ -31,7 +31,8 @@ export const login = async (req, res) => {
             msg: "Sesión iniciada exitosamente!!",
             userDetails: {
                 username: user.username,
-                token: token
+                token: token,
+                role: user.role
             }
         });
 
