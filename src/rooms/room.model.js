@@ -29,6 +29,9 @@ const RoomSchema = Schema({
         required: [true, "El precio es requerido"],
         min: [1, "El precio no puede ser 0"]
     },
+    imagen: {
+        type: String,
+    },
     status: {
         type: Boolean,
         default: true

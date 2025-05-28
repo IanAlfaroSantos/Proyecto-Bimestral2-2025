@@ -13,7 +13,8 @@ export const saveHotel = async (req, res) => {
             name: data.name,
             direccion: data.direccion,
             categoria: data.categoria,
-            comodidades: data.comodidades
+            comodidades: data.comodidades,
+            imagen: data.imagen
         })
 
         res.status(200).json({

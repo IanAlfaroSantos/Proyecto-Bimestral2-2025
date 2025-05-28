@@ -151,6 +151,40 @@ export const getReservacionPorId = async (req = request, res = response) => {
     }
 };
 
+export const getReservacionPorHotel = async (req = request, res = response) => {
+    try {
+        const { nombreHotel } = req.params;
+
+        const hoteles = await hotelModel.find({
+            name: { $regex: nombreHotel, $options: 'i' },
+            status: true
+        });
+
+        const hotelIds = hoteles.map(h => h._id);
+
+        const reservaciones = await Reservacion.find({
+            nombreHotel: { $in: hotelIds },
+            status: true
+        })
+            .populate('nombreUsuario', 'name surname email phone')
+            .populate('nombreHotel', 'name direccion categoria comodidades status')
+            .populate('habitaciones', 'type price status')
+            .populate('eventos', 'tipoSala numeroSalas precio');
+
+        res.status(200).json({
+            success: true,
+            reservaciones
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            msg: 'Error al buscar reservaciones por nombre del hotel!',
+            error: error.message || error
+        });
+    }
+};
+
 export const putReservacion = async (req, res = response) => {
     try {
         const { id } = req.params;
