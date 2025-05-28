@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { postReservacion, getReservaciones, getReservacionPorId, getReservacionPorHotel, putReservacion, deleteReservacion } from "./reservacion.controller.js";
+import { postReservacion, getReservaciones, getReservacionPorId, getReservacionPorHotel, putReservacion, deleteReservacion, getReservacionesPorUsuario } from "./reservacion.controller.js";
 import { validarCampos } from "../middlewares/validar-campos.js";
 import { validarJWT } from "../middlewares/validar-jwt.js";
 
@@ -14,6 +14,8 @@ router.post(
 );
 
 router.get("/getReservaciones", getReservaciones);
+
+router.get("/getReservacionesPorUsuario",validarJWT, getReservacionesPorUsuario);
 
 router.get(
     "/getReservacionPorId/:id",

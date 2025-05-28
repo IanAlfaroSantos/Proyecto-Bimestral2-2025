@@ -124,6 +124,38 @@ export const getReservaciones = async (req = request, res = response) => {
     }
 };
 
+export const getReservacionesPorUsuario = async (req = request, res = response) => {
+    try {
+        const uid = req.user; 
+
+        const reservaciones = await Reservacion.find({ nombreUsuario: uid, status: true })
+            .populate('nombreUsuario', 'name surname username email phone role status')
+            .populate('nombreHotel', 'name direccion categoria comodidades status')
+            .populate('habitaciones', 'type price status')
+            .populate('eventos', 'tipoSala numeroSalas precio');
+
+        if (!reservaciones || reservaciones.length === 0) {
+            return res.status(404).json({
+                success: false,
+                msg: 'No se encontraron reservaciones para este usuario.'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            total: reservaciones.length,
+            reservaciones
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            msg: 'Error cargando reservaciones!',
+            error: error.message || error
+        });
+    }
+};
+
 export const getReservacionPorId = async (req = request, res = response) => {
     try {
         const { id } = req.params;
