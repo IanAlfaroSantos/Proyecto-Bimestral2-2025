@@ -12,7 +12,7 @@ import {
 
 export const createRoom = async (req = request, res = response) => {
     try {
-        const {type, quantity, price, hotelName} = req.body;
+        const {type, quantity, price, hotelName, imagen} = req.body;
 
         const hotel = await Hotel.findOne({name: hotelName})
         await soloAdminHotel(req);
@@ -24,7 +24,8 @@ export const createRoom = async (req = request, res = response) => {
             hotel: hotel._id,
             type,
             quantity,
-            price
+            price,
+            imagen
         });
         
         await newRoom.save();

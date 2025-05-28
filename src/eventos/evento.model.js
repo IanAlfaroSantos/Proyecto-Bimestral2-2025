@@ -24,7 +24,9 @@ const EventoSchema = Schema({
         required: [true, "El precio es requerido!"],
         min: [0.01, "El precio debe ser mayor que 0!"]
     },
-
+    imagen: {
+        type: String,
+    },
     status: {
         type: Boolean,
         default: true,

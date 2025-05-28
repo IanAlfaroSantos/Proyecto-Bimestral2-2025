@@ -33,6 +33,9 @@ const HotelSchema = Schema({
         type: Number,
         default: 0
     },
+    imagen : {
+        type: String
+    },
     status: {
         type: Boolean,
         default: true
