@@ -185,6 +185,40 @@ export const updateUser = async (req, res = response) => {
     }
 }
 
+export const updateUserAdmin = async (req, res = response) => {
+    try {
+
+        const { id } = req.params || {};
+        const { _id, email, role, password, currentPassword, ...data } = req.body;
+        let { username, phone } = req.body || {};
+        
+        await existeUserById(id);
+        
+        const user = await User.findById(id);
+        await phoneLength(phone);
+        await noActualizarAdmin(user._id);
+        await verificarUsuarioExistente(username, user);
+        await statusUser(user);
+        await validarPasswordUpdate(user, password, currentPassword);
+        await soloAdmin(req);
+
+        const updateUser = await User.findByIdAndUpdate(id, data, {new: true});
+
+        res.status(200).json({
+            success: true,
+            msg: 'Usuario actualizado exitosamente!!',
+            updateUser
+        });
+        
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            msg: 'Error al actualizar usuario',
+            error: error.message
+        });
+    }
+}
+
 export const updateRole = async (req, res = response) => {
     try {
 
@@ -230,6 +264,36 @@ export const deleteUser = async (req, res = response) => {
         await validarPasswordParaEliminar(user, password);
         
         const userDelete = await User.findByIdAndUpdate(user._id, { status: false }, { new: true });
+
+        res.status(200).json({
+            success: true,
+            msg: 'Usuario eliminado exitosamente!!',
+            userDelete
+        });
+        
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            msg: 'Error al eliminar usuario',
+            error: error.message
+        });
+    }
+}
+
+export const deleteUserAdmin = async (req, res = response) => {
+
+    try {
+        const { id } = req.params || {};
+        const { password, username } = req.body || {};
+        
+        await existeUserById(id);
+
+        const user = await User.findById(id);
+        await noActualizarAdmin(user._id);
+        await statusUser(user);
+        await soloAdmin(req);
+        
+        const userDelete = await User.findByIdAndUpdate(id, { status: false }, { new: true });
 
         res.status(200).json({
             success: true,
