@@ -1,14 +1,15 @@
 import { response, request } from "express";
 import Evento from "./evento.model.js";
 import Hotel from '../hoteles/hotel.model.js';
-import { validarHotelExistente, validarEventoExistentePorHotel } from "../helpers/db-validator-eventos.js";
+import { validarHotelExistente, noAgregarEventoRepetido } from "../helpers/db-validator-eventos.js";
 
 export const postEvento = async (req, res) => {
     try {
         const data = req.body;
+        const {tipoSala} = req.body;
 
         const hotel = await validarHotelExistente(data.hotel);
-        await validarEventoExistentePorHotel(hotel._id);
+        await noAgregarEventoRepetido(hotel._id, tipoSala);
 
         data.hotel = hotel._id;
         const evento = new Evento(data);

@@ -17,9 +17,9 @@ export const validarHotelExistente = async (nombreHotel) => {
     return hotel;
 };
 
-export const validarEventoExistentePorHotel = async (hotelId) => {
-    const evento = await Evento.findOne({ hotel: hotelId, status: true });
-    if (evento) {
-        throw new Error('Este hotel ya tiene un evento registrado! Debes actualizarlo!');
+export const noAgregarEventoRepetido = async (hotelId, tipoSala) => {
+    const existing = await Evento.findOne({ hotel: hotelId, tipoSala });
+    if (existing) {
+        throw new Error("Ya existe un Evento de este tipo para el hotel. Actualicela");
     }
 };
